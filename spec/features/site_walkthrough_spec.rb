@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "A full page walkthrough", :sauce => true do
+describe "A full page walkthrough" do
   it "can do it all", :js => true do
     sign_in_rep
 
