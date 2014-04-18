@@ -9,7 +9,7 @@ Capybara.default_driver = :sauce
 Capybara.app_host = 'http://staging.tnf.elasticsuite.com/'
 Sauce.config do |config|
   config[:browsers] = [
-    ["Linux", "Firefox", "27"],
+    # ["Linux", "Firefox", "27"],
     ["Linux", "Chrome", nil]
   ]
   config[:start_local_application] = false
