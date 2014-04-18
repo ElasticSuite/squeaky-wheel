@@ -1,7 +1,7 @@
 require "spec_helper"
 
 
-describe "Manually registering a user through the splash page" do
+describe "Manually registering a user through the splash page", :sauce => true do
   # it "registers with accurate information", :js => true do
 
   #   c = Fabricate(:customer)
@@ -28,11 +28,8 @@ describe "Manually registering a user through the splash page" do
   it "fails to register w/o information", :js => true do
     visit("#splash")
     page.should have_content("An account is required to access the The North Face website.")
-    dojo_visit('splash,register')
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Register").click
     page.should have_content("You will need an Account Number and Access Key to register for The North Face.")
-
-    find("#dijit_form_Button_5_label", :text => "Register").click
-    page.should have_content("There were errors with your registration request")
   end
 end
 

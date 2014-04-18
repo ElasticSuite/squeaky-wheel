@@ -3,7 +3,6 @@ require "spec_helper"
 describe 'a visitor on the splash page', :sauce => true do
   it 'can login with correct information', :js => true do
     visit("#splash")
-    dojo_visit('splash,login')
     page.should have_content('An account is required to access the The North Face website.')
 
     fill_in "Username", :with => "automatictester"
@@ -13,7 +12,6 @@ describe 'a visitor on the splash page', :sauce => true do
 
     page.should have_content("Create New Document")
     page.should have_content("Open From Cloud")
-    page.should have_content("Open From Dealer")
     page.should have_content("Open From Desktop")
     page.should have_content("Manage Catalogs")
     page.should have_content("Print Jobs")
@@ -22,7 +20,7 @@ describe 'a visitor on the splash page', :sauce => true do
     page.should have_content("Logout")
     page.should_not have_content('Username and password do not match')
 
-    sign_out
+    # sign_out
   end
 
   it "cant log with no information", :js => true do

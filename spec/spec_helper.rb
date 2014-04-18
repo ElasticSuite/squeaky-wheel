@@ -54,7 +54,7 @@ def sign_out
 end
 
 def reset_rep
-  dojo_visit("dashboard,accountSettings")
+  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").click
   find_field("Confirm Password")
   find_field("First Name")
   find_field("Last Name")
@@ -73,7 +73,7 @@ def reset_rep
 end
 
 def destroy_order
-  dojo_visit("dashboard,openFromCloud")
+  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Open From Cloud").click
 
   page.should have_content "Order #"
   page.should have_content "Last Saved"
@@ -88,7 +88,7 @@ def destroy_order
 end
 
 def create_order(order_name = "CapyTester")
-  dojo_visit("dashboard,newDocument")
+  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create New Document").click
 
   find_field("Name").set("#{order_name}")
   within("div.field.submit") do
@@ -102,7 +102,7 @@ def create_order(order_name = "CapyTester")
 end
 
 def visit_builder
-  dojo_visit("dashboard,openFromCloud")
+  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Open From Cloud").click
   within("div.dgrid-content.ui-widget-content") do
     within('div.dgrid-row', :match => :first) do
       find("td.field-name").click
@@ -111,7 +111,7 @@ def visit_builder
 end
 
 def create_populated_order(order_name = "KEEP tester order")
-  dojo_visit("dashboard,newDocument")
+  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create New Document").click
   find_field("Name").set("#{order_name}")
   within("div.field.submit") do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create").click
