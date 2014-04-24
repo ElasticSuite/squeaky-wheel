@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The purchase page" do
+describe "The purchase page", :sauce => true do
   it "submits with proper fields filled in", :js => true do
     sign_in_rep
     create_order_with_sizes

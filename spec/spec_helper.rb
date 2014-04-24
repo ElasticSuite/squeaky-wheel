@@ -26,7 +26,8 @@ def sign_in_rep(args = {})
   args[:password] ||= "testing"
 
   visit("#splash")
-
+  sleep(1)
+  page.should have_content("An account is required to access the The North Face website.")
   find("#widget_elasticScramble_splash_login_username")
   find("#widget_elasticScramble_splash_login_password")
 
@@ -73,36 +74,38 @@ def reset_rep
 end
 
 def destroy_order
-  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Open From Cloud").click
+  visit('#dashboard')
+  find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Open From Cloud").click
 
   page.should have_content "Order #"
   page.should have_content "Last Saved"
 
   within(:css, "div.dgrid-scroller") do
-    first(:css, 'span.dijitReset.dijitStretch.dijitButtonContents', :visible => true).click
+    first(:css, 'span.dijitReset.close').click
   end
   within("div.modalConfirm") do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
-    sleep(1)
   end
+  page.should have_content("Document removed.")
 end
 
 def create_order(order_name = "CapyTester")
-  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create New Document").click
+    find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create New Document").click
 
   find_field("Name").set("#{order_name}")
   within("div.field.submit") do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create").click
   end
+  sleep(0.5)
   page.should have_content("Total")
   current_url.split("#")[1] == "builder,browse"
   find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
-  find("#dojox_form__BusyButtonMixin_0_text").click
+  first("td", :text => "Save").click
   page.should have_content("Document saved.")
 end
 
 def visit_builder
-  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Open From Cloud").click
+  find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Open From Cloud").click
   within("div.dgrid-content.ui-widget-content") do
     within('div.dgrid-row', :match => :first) do
       find("td.field-name").click
@@ -117,14 +120,16 @@ def create_populated_order(order_name = "KEEP tester order")
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create").click
   end
   find("span.dijitReset.dijitInline.dijitButtonText", :text => "Order").click
+  page.should have_content "Summary"
+  page.should have_content "Items"
+  page.should have_content "Menu"
   within('ul.variations', :match => :first) do
     first("li").click
-    sleep(1)
   end
   page.should have_content("has been successfully added")
   find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
-  find("#dojox_form__BusyButtonMixin_0_text").click
-  sleep(0.5)
+  first("td", :text => "Save").click
+  page.should have_content("Document saved.")
 end
 
 def create_order_with_sizes(name = "Purchase Testing")

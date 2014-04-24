@@ -1,15 +1,13 @@
 require "spec_helper"
 
-describe "Within the top bar of builder" do
+describe "Within the top bar of builder", :sauce => true do
   def visit_menu
-    visit_builder
     first("span", :text => "Menu").click
   end
 
   it "has the top links", :js => true do
     sign_in_rep
     create_order
-    visit_builder
 
     page.should have_content "Browse"
     page.should have_content "Order"
@@ -20,7 +18,6 @@ describe "Within the top bar of builder" do
     page.should have_content "Menu"
 
     destroy_order
-    sign_out
   end
 
   it "has the menu links", :js => true do
@@ -44,7 +41,6 @@ describe "Within the top bar of builder" do
     page.should have_content "Close"
 
     destroy_order
-    sign_out
   end
 
   it "menu > new order works", :js => true do
@@ -57,14 +53,13 @@ describe "Within the top bar of builder" do
 
     page.should have_content "New Order"
     find_field("Name")
-    find("input#customerField")
     find("table#elasticScramble_dashboard_newDocument_catalog")
-    find("table#elasticScramble_dashboard_newDocument_custom_catalog")
     find("input#elasticScramble_dashboard_newDocument_start_date")
-    find("#dijit_form_Button_33_label", :text => "Create")
+    within("div.submit") do
+      find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create")
+    end
 
     destroy_order
-    sign_out
   end
 
   it "menu > save as works", :js => true do
@@ -76,23 +71,24 @@ describe "Within the top bar of builder" do
     within(:css, "div.dijitDialog.modalPrompt.modalPromptFocused") do
       page.should have_content "Enter a name for the new order"
       page.should have_content "SAVE AS"
-      page.save_screenshot("save_as_modal.png")
       within(:css, "div.dijitReset.dijitInputField.dijitInputContainer") do
         find("input").set("Better Test Name")
       end
-      find(:css, "span.dijitInline.dijitButtonText", :text => "Save").click
     end
+    find("span.dijitReset.dijitButtonText", :text => "Okay").click
 
     page.should have_content("Document saved as \"Better Test Name\"")
-    dojo_visit('dashboard,openFromCloud')
+    visit_menu
+    find("td", :text => "Close").click
+    find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Open From Cloud").click
+
     page.should have_content("Better Test Name")
     destroy_order
-    sign_out
   end
 
-  it "menu > download to desktop works", :js => true do
-    pending
-    visit_menu
-  end
+  # it "menu > download to desktop works", :js => true do
+  #   pending
+  #   visit_menu
+  # end
 end
 

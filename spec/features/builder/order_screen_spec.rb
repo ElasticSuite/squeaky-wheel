@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The order tab in builder" do
+describe "The order tab in builder", :sauce => true do
   it "can add items to order", :js => true do
 
     sign_in_rep
@@ -11,11 +11,9 @@ describe "The order tab in builder" do
     page.should have_content("Results:")
     within('ul.variations', :match => :first) do
       first("li").click
-      sleep(1)
     end
     page.should have_content("has been successfully added")
     destroy_order
-    sign_out
   end
 
   it "cant add the same item twice", :js => true do
@@ -27,19 +25,14 @@ describe "The order tab in builder" do
     page.should have_content("Results:")
     within('ul.variations', :match => :first) do
       first("li").click
-      sleep(1)
     end
     page.should have_content("has been successfully added")
 
     within('ul.variations', :match => :first) do
       first("li").click
-      sleep(1)
     end
     page.should have_content("This product is already in your cart")
     page.should_not have_content("has been successfully added")
     destroy_order
-    sign_out
   end
 end
-
-# .trigger('mousedown')
