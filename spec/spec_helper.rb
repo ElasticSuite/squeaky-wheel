@@ -138,4 +138,5 @@ def create_order_with_sizes(name = "Purchase Testing")
   within("div.row.stockItem", :match => :first) do
     find("input.dijitReset.dijitInputInner").set("1")
   end
+  first("div.documentItemSummary").click
 end

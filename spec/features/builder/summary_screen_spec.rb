@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The Summary page" do
+describe "The Summary page", :sauce => true do
   it "has all summary columns", :js => true do
     sign_in_rep
     create_order
@@ -21,26 +21,26 @@ describe "The Summary page" do
     page.should have_content("Color")
 
     destroy_order
-    sign_out
   end
 
-  it "adds % to 100", :js => true do
+  it "quantity and price add to 100%", :js => true do
     sign_in_rep
     create_order_with_sizes
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Summary").click
+    page.should have_content("Quantity")
+    page.should have_content("Category")
     @quantity = 0
     @price = 0
     all("td.column.quantityPercent").each do |num|
-      @quantity += num.split("%")[0].to_i
+      @quantity += (num.to_s.split("%")[0]).to_i
     end
     @quantity == 100
     all("td.column.pricePercent").each do |num|
-      @price += num.split("%")[0].to_i
+      @price += (num.to_s.split("%")[0]).to_i
     end
     @price == 100
 
     destroy_order
-    sign_out
   end
 
   it "populates columns when selected from dropdown", :js => true do
