@@ -35,7 +35,7 @@ describe "Within the account settings tab", :sauce => true do
     find("#dijit_form_Button_14_label", :text => "Submit Changes").click
     page.should have_content("Submit Changes")
     sign_out
-    sign_in_rep(:username => "automatictester", :password => "testing123")
+    sign_in_rep(:username => "automatictester.rep", :password => "testing123")
     reset_rep
   end
 

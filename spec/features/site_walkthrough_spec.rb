@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe "A full page walkthrough" do
-  it "can do it all", :js => true do
+describe "A full page walkthrough", :sauce => true do
+  it "can create/populate/send an order", :js => true do
     sign_in_rep
 
     # Check dashboard buttons
@@ -14,8 +14,92 @@ describe "A full page walkthrough" do
     find('span.dijitReset.dijitInline.dijitButtonNode', :text => "Account Settings")
     find('span.dijitReset.dijitInline.dijitButtonNode', :text => "Logout")
 
+    # Check Order creation
+    create_order("SmokeTesting")
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Order").click
+    page.should have_content("General Filters")
+    page.should have_content("Results:")
+    within('ul.variations', :match => :first) do
+      first("li").click
+    end
+    page.should have_content("has been successfully added")
+
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
+    first("td", :text => "Save").click
+    page.should have_content("Document saved.")
+
+    # Open saved order from cloud
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
+    find("td", :text => "Open From Cloud").click
+    within("div.dgrid-content.ui-widget-content") do
+      within('div.dgrid-row', :match => :first) do
+        find("td.field-name").value == "SmokeTesting"
+        find("td.field-updated_at").value == Time.now.strftime("%m/%d/%y")
+        first("td").click
+      end
+    end
+    page.should have_content "Browse"
+    page.should have_content "Items"
+    page.should have_content "Total"
+
+    # Add size for item
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Sizing").click
+    first("span.priceLabel").value == "$0.00"
+    within("div.row.stockItem", :match => :first) do
+      find("input.dijitReset.dijitInputInner").set("1")
+    end
+    find("p.units").click
+    find("p.units").value == "Units:1"
+    first("span.priceLabel").value != "$0.00"
+
+    # Summary of order shows up
+
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Summary").click
+    page.should have_content("Quantity")
+    page.should have_content("Category")
+    @quantity = 0
+    @price = 0
+    all("td.column.quantityPercent").each do |num|
+      @quantity += (num.to_s.split("%")[0]).to_i
+    end
+    @quantity == 100
+    all("td.column.pricePercent").each do |num|
+      @price += (num.to_s.split("%")[0]).to_i
+    end
+    @price == 100
+
+    # Can send an order on the purchase page
+    # WARNING: THIS WILL SEND AN ORDER
+
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Purchase").click
+    page.should have_content("BILLING INFO")
+    page.should have_content("Billing Address")
+    within("div.addresses.subform") do
+      find("div.dijitDownArrowButton").click
+    end
+    find("div.dijitMenuItem", :match => :first).click
+    within("div.poNumber.field") do
+      find("input.dijitReset.dijitInputInner").set("123456")
+    end
+    find("span#finalSubmitButton_label", :text => "Submit Order").click
+    page.should have_content("ORDER SUBMISSION")
+    page.should have_content("Your order is about to be submitted.")
+    within("div.actions.dijitDialogPaneActionBar.right") do
+      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Submit").click
+    end
+
+    page.should have_content("Order submitted successfully.")
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Okay").click
+    find("span#finalSubmitButton_label", :text => "Submit Order").click
+    page.should have_content("This order has already been submitted")
+  end
+
+  it "can save/modify/delete an order", :js => true do
+    sign_in_rep
+
     # Check Account Settings changes
-    dojo_visit('dashboard,accountSettings')
+
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").click
     page.should have_content("Account Settings")
     page.should have_content("First Name")
     page.should have_content("Last Name")
@@ -28,85 +112,28 @@ describe "A full page walkthrough" do
     fill_in "Confirm Password", :with => "testing123"
     fill_in "First Name", :with => "RobotButler"
     fill_in "Last Name", :with => "Maximus"
-    fill_in "Username", :with => "robinski.rep"
+    fill_in "Username", :with => "modifiedautouser"
     fill_in "E-mail", :with => "random123@example.com"
-    find("#dijit_form_Button_14_label", :text => "Submit Changes").click
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Submit Changes").click
     page.should have_content("Successfully Updated!")
     reset_rep
 
-    # Check Order creation
-    create_order("SmokeTesting")
-    within("div#dijit__Container_0.childViewButtons") do
-      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Order").click
-    end
-    page.should have_content("General Filters")
-    page.should have_content("Results:")
-    within('ul.variations', :match => :first) do
-      first("li").click
-      sleep(1)
-    end
-    page.should have_content("has been successfully added")
-
-    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
-    find("#dojox_form__BusyButtonMixin_0_text").click
-    sleep(1)
-    page.should have_content("Document saved.")
-
-    # Open saved order from cloud
-    dojo_visit("dashboard")
-    find('span.dijitReset.dijitInline.dijitButtonNode', :text => "Open From Cloud").click
-    within("div.dgrid-content.ui-widget-content") do
-      within('div.dgrid-row', :match => :first) do
-        find("td.field-name").value == "SmokeTesting"
-        find("td.field-updated_at").value == Time.now.strftime("%m/%d/%y")
-        first("td").click
-      end
-    end
-    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Save").click
-    within("div#dijit__Container_0.childViewButtons") do
-      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Order").click
-    end
-    page.should have_content "Total"
-    page.should have_content("General Filters")
-    page.should have_content("Results:")
-    find('ul.variations', :match => :first)
-
-    # Add item to order
-    within('ul.variations', :match => :first) do
-      first("li").click
-    end
-    page.should have_content("has been successfully added")
-
-    # Add size for item
-    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Sizing").click
-    within("div.row.stockItem", :match => :first) do
-      find("input.dijitReset.dijitInputInner").set("1")
-    end
-
-    # fill out purchase dropdowns
-    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Purchase").click
-    page.should have_content("BILLING INFO")
-    page.should have_content("Billing Address")
-    within("div.addresses.subform") do
-      find("div.dijitDownArrowButton").click
-      sleep(0.5)
-    end
-    find("div.dijitMenuItem", :match => :first).click
-    find("span#finalSubmitButton_label", :text => "Submit Order").click
-    page.should have_content("Please enter a PO Number")
-
     # Delete most recently saved order
-    dojo_visit("dashboard,openFromCloud")
-    within("div.dgrid-content.ui-widget-content") do
-      within('div.dgrid-row', :match => :first) do
-        first("span.dijitReset.dijitStretch.dijitButtonContents").click
-      end
-    end
+    create_order
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
+    find("td", :text => "Open From Cloud").click
 
-    within("div.dijitDialog.dijitDialogFixed") do
+    page.should have_content("Total")
+    page.should have_content("Last Saved")
+
+    within(:css, "div.dgrid-scroller") do
+      first(:css, 'span.dijitReset.close').click
+    end
+    within("div.modalConfirm") do
       find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
     end
-    sleep(1)
+    page.should have_content("Document removed.")
+
     sign_out
   end
 end

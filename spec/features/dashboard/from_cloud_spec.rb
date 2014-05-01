@@ -16,4 +16,23 @@ describe "Within the open from cloud tab", :sauce => true do
     destroy_order
     sign_out
   end
+
+  it "orders can be destroyed", :js => true do
+    sign_in_rep
+    create_order("CLOUDdeleteCHECK")
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
+    find("td.dijitMenuItemLabel", :text => "Open From Cloud").click
+
+    page.should have_content "Order #"
+    page.should have_content "Last Saved"
+
+    within(:css, "div.dgrid-scroller") do
+      first(:css, 'span.dijitReset.close').click
+    end
+    within("div.modalConfirm") do
+      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
+    end
+    page.should have_content("Document removed.")
+    page.should_not have_content("CLOUDdeleteCHECK")
+  end
 end

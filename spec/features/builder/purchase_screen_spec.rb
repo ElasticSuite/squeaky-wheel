@@ -27,7 +27,7 @@ describe "The purchase page", :sauce => true do
     page.should have_content("Order submitted successfully.")
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Okay").click
     find("span#finalSubmitButton_label", :text => "Submit Order").click
-    page.should have_content("The order has already been submitted")
+    page.should have_content("This order has already been submitted")
 
     destroy_order
   end

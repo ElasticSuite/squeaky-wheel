@@ -22,11 +22,10 @@ end
 require "sauce_helper"
 
 def sign_in_rep(args = {})
-  args[:username] ||= "automatictester"
+  args[:username] ||= "automatictester.rep"
   args[:password] ||= "testing"
 
-  visit("#splash")
-  sleep(1)
+  visit('#')
   page.should have_content("An account is required to access the The North Face website.")
   find("#widget_elasticScramble_splash_login_username")
   find("#widget_elasticScramble_splash_login_password")
@@ -35,7 +34,7 @@ def sign_in_rep(args = {})
   fill_in "Password",     with: args[:password]
 
   find("#dijit_form_Button_3", :text => "Login").click
-  find("#dijit_form_Button_13_label", :text => "Logout")
+  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Logout")
 end
 
 def dojo_visit(location)
@@ -43,7 +42,7 @@ def dojo_visit(location)
 end
 
 def sign_out
-  dojo_visit("dashboard")
+  visit("#dashboard")
   page.should_not have_content("Checking your credentials...")
   page.should have_css("div.innerBox")
   page.should have_content("Logout", :visible => true)
@@ -52,6 +51,7 @@ def sign_out
   within(:css, "div.userStatus") do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Logout", :visible => true).click
   end
+  page.should have_content("An account is required to access the The North Face website.")
 end
 
 def reset_rep
@@ -65,7 +65,7 @@ def reset_rep
   page.should have_content("Submit Changes")
   fill_in "Password", :with => "testing"
   fill_in "Confirm Password", :with => "testing"
-  fill_in "Username", :with => "automatictester"
+  fill_in "Username", :with => "automatictester.rep"
   fill_in "First Name", :with => "Auto"
   fill_in "Last Name", :with => "Tester"
   fill_in "E-mail", :with => "automatictester@elasticsuite.com"
@@ -90,7 +90,7 @@ def destroy_order
 end
 
 def create_order(order_name = "CapyTester")
-    find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create New Document").click
+  find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create New Document").click
 
   find_field("Name").set("#{order_name}")
   within("div.field.submit") do

@@ -12,12 +12,11 @@ describe "The Summary page", :sauce => true do
       find("input.dijitReset.dijitInputField.dijitArrowButtonInner").click
     end
     page.should have_content("Select Summary Column(s)")
-    page.should have_content("Sub Category")
+    page.should have_content("Special Groupings")
     page.should have_content("Workbook")
     page.should have_content("Abm")
     page.should have_content("Sbu")
     page.should have_content("Gender")
-    page.should have_content("Technology")
     page.should have_content("Color")
 
     destroy_order
@@ -43,17 +42,17 @@ describe "The Summary page", :sauce => true do
     destroy_order
   end
 
-  it "populates columns when selected from dropdown", :js => true do
-    pending
-    sign_in_rep
-    create_order
-    destroy_order
-    sign_out
-  end
+  # it "populates columns when selected from dropdown", :js => true do
+  #   pending
+  #   sign_in_rep
+  #   create_order
+  #   destroy_order
+  #   sign_out
+  # end
 
-  it "has total orders", :js => true do
-  end
+  # it "has total orders", :js => true do
+  # end
 
-  it "has page 1 orders only if selected", :js => true do
-  end
+  # it "has page 1 orders only if selected", :js => true do
+  # end
 end
