@@ -26,7 +26,7 @@ def sign_in_rep(args = {})
   args[:password] ||= "testing"
 
   visit('#')
-  page.should have_content("An account is required to access the The North Face website.")
+  page.should have_content("An account is required to access the")
   find("#widget_elasticScramble_splash_login_username")
   find("#widget_elasticScramble_splash_login_password")
 
@@ -51,7 +51,7 @@ def sign_out
   within(:css, "div.userStatus") do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Logout", :visible => true).click
   end
-  page.should have_content("An account is required to access the The North Face website.")
+  page.should have_content("An account is required to access the ")
 end
 
 def reset_rep

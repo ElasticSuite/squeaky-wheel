@@ -28,7 +28,7 @@ describe 'a visitor on the splash page', :sauce => true do
 
     page.should have_content('An account is required to access the The North Face website.')
     page.should have_content('Register')
-    page.should_not have_content("You will need an Account Number and Access Key to register for The North Face.")
+    page.should_not have_content("You will need an Account Number and Access Key to register")
 
     find("span#dijit_form_Button_3_label.dijitReset", :text => "Login").click
     page.should have_content("Login")
@@ -37,9 +37,9 @@ describe 'a visitor on the splash page', :sauce => true do
 
   it "cant log with incorrect info", :js => true do
     visit("#splash,login")
-    page.should_not have_content("You will need an Account Number and Access Key to register for The North Face.")
+    page.should_not have_content("You will need an Account Number and Access Key to register")
 
-    page.should have_content('An account is required to access the The North Face website.')
+    page.should have_content('An account is required to access the ')
     page.should have_content('Register')
 
     fill_in "Username", :with => "asdfasf"

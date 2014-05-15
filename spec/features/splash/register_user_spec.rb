@@ -27,9 +27,9 @@ describe "Manually registering a user through the splash page", :sauce => true d
 
   it "fails to register w/o information", :js => true do
     visit("#splash")
-    page.should have_content("An account is required to access the The North Face website.")
+    page.should have_content("An account is required to access the")
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Register").click
-    page.should have_content("You will need an Account Number and Access Key to register for The North Face.")
+    page.should have_content("You will need an Account Number and Access Key to register")
   end
 end
 
