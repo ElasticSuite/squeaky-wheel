@@ -6,7 +6,7 @@ describe 'a visitor on the splash page', :sauce => true do
     page.should have_content('An account is required to access the The North Face website.')
 
     fill_in "Username", :with => "automatictester"
-    fill_in "Password", :with => "testing"
+    fill_in "Password", :with => "testing1"
 
     find("#dijit_form_Button_3_label", :text => "Login").click
 

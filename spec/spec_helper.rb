@@ -23,7 +23,7 @@ require "sauce_helper"
 
 def sign_in_rep(args = {})
   args[:username] ||= "automatictester.rep"
-  args[:password] ||= "testing"
+  args[:password] ||= "testing1"
 
   visit('#')
   page.should have_content("An account is required to access the")
@@ -63,8 +63,8 @@ def reset_rep
   find_field("E-mail")
   find_field("Password")
   page.should have_content("Submit Changes")
-  fill_in "Password", :with => "testing"
-  fill_in "Confirm Password", :with => "testing"
+  fill_in "Password", :with => "testing1"
+  fill_in "Confirm Password", :with => "testing1"
   fill_in "Username", :with => "automatictester.rep"
   fill_in "First Name", :with => "Auto"
   fill_in "Last Name", :with => "Tester"
