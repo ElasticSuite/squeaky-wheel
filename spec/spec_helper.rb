@@ -74,8 +74,10 @@ def reset_rep
 end
 
 def destroy_order
-  visit('#dashboard')
-  find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Open From Cloud").click
+  first("span", :text => "Menu").click
+  first("tr.dijitMenuItem", :text => "Save").click
+  first("span", :text => "Menu").click
+  find("tr.dijitMenuItem", :text => "Open From Cloud").click
 
   page.should have_content "Order #"
   page.should have_content "Last Saved"

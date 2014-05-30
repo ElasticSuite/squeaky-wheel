@@ -12,9 +12,12 @@ describe "Within the open from cloud tab", :sauce => true do
     within('div[id^="dgrid_0-row"]', :match => :first) do
       find("td.field-name").value == "CapyTester"
       find("td.field-updated_at").value == Time.now.strftime("%m/%d/%y")
+      find("span.dijitReset.close").click
     end
-    destroy_order
-    sign_out
+    within("div.modalConfirm") do
+      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
+    end
+    page.should have_content("Document removed.")
   end
 
   it "orders can be destroyed", :js => true do
