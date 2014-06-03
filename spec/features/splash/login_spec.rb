@@ -1,11 +1,11 @@
 require "spec_helper"
 
-describe 'a visitor on the splash page', :sauce => true do
+describe 'a visitor on the splash page', :sauce => ENV['ON_SAUCE'] do
   it 'can login with correct information', :js => true do
     visit("#splash")
     page.should have_content('An account is required to access the The North Face website.')
 
-    fill_in "Username", :with => "automatictester"
+    fill_in "Username", :with => "automatictester.rep"
     fill_in "Password", :with => "testing1"
 
     find("#dijit_form_Button_3_label", :text => "Login").click

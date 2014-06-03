@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "A full page walkthrough", :sauce => true do
+describe "A full page walkthrough", :sauce => ENV['ON_SAUCE'] do
   it "can create/populate/send an order", :js => true do
     sign_in_rep
 

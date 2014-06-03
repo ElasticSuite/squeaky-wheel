@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The purchase page", :sauce => true do
+describe "The purchase page", :sauce => ENV['ON_SAUCE'] do
   it "submits with proper fields filled in", :js => true do
     # WARNING: This submits an order!!!!
     sign_in_rep

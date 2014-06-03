@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Within the account settings tab", :sauce => true do
+describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
   it "fields exist for logged in user", :js => true do
     sign_in_rep
 

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The order tab in builder", :sauce => true do
+describe "The order tab in builder", :sauce => ENV['ON_SAUCE'] do
   it "can add items to order", :js => true do
 
     sign_in_rep

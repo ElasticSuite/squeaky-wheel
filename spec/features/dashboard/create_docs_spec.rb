@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Within create new document tab", :sauce => true do
+describe "Within create new document tab", :sauce => ENV['ON_SAUCE'] do
   it "has the proper new order options", :js => true do
     sign_in_rep(:username => "automatictester.rep")
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create New Document").click
@@ -27,6 +27,7 @@ describe "Within create new document tab", :sauce => true do
     end
     page.should have_content("Total")
     current_url.split("#")[1] == "builder,browse"
+    destroy_order
   end
 
   it "wont create if the catalog name is invalid", :js => true  do

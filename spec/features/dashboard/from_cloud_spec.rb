@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Within the open from cloud tab", :sauce => true do
+describe "Within the open from cloud tab", :sauce => ENV['ON_SAUCE'] do
   it "new catalogs show correct name / updated day", :js => true do
     sign_in_rep
     create_order
@@ -12,7 +12,9 @@ describe "Within the open from cloud tab", :sauce => true do
     within('div[id^="dgrid_0-row"]', :match => :first) do
       find("td.field-name").value == "CapyTester"
       find("td.field-updated_at").value == Time.now.strftime("%m/%d/%y")
-      find("span.dijitReset.close").click
+      within("span.dijitReset.close") do
+        find("span.dijitButtonContents.dijitStretch").click
+      end
     end
     within("div.modalConfirm") do
       find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
@@ -29,8 +31,10 @@ describe "Within the open from cloud tab", :sauce => true do
     page.should have_content "Order #"
     page.should have_content "Last Saved"
 
-    within(:css, "div.dgrid-scroller") do
-      first(:css, 'span.dijitReset.close').click
+    within('div[id^="dgrid_0-row"]', :match => :first) do
+      within("span.dijitReset.close") do
+        find("span.dijitButtonContents.dijitStretch").click
+      end
     end
     within("div.modalConfirm") do
       find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click

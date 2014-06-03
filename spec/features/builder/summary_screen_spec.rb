@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The Summary page", :sauce => true do
+describe "The Summary page", :sauce => ENV['ON_SAUCE'] do
   it "has all summary columns", :js => true do
     sign_in_rep
     create_order

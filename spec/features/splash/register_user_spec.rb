@@ -1,7 +1,7 @@
 require "spec_helper"
 
 
-describe "Manually registering a user through the splash page", :sauce => true do
+describe "Manually registering a user through the splash page", :sauce => ENV['ON_SAUCE'] do
   # it "registers with accurate information", :js => true do
 
   #   c = Fabricate(:customer)

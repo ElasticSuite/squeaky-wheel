@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Within the top bar of builder", :sauce => true do
+describe "Within the top bar of builder", :sauce => ENV['ON_SAUCE'] do
   def visit_menu
     first("span", :text => "Menu").click
   end
@@ -39,7 +39,7 @@ describe "Within the top bar of builder", :sauce => true do
     page.should have_content "Preferences"
     page.should have_content "Support"
     page.should have_content "Close"
-
+    visit_menu
     destroy_order
   end
 
@@ -58,8 +58,15 @@ describe "Within the top bar of builder", :sauce => true do
     within("div.submit") do
       find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create")
     end
-
-    destroy_order
+    within('div[id^="dgrid_0-row"]', :match => :first) do
+      within("span.dijitReset.close") do
+        find("span.dijitButtonContents.dijitStretch").click
+      end
+    end
+    within("div.modalConfirm") do
+      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
+    end
+    page.should have_content("Document removed.")
   end
 
   it "menu > save as works", :js => true do
@@ -68,7 +75,7 @@ describe "Within the top bar of builder", :sauce => true do
     visit_menu
 
     find("td", :text => "Save As").click
-    within(:css, "div.dijitDialog.modalPrompt.modalPromptFocused") do
+    within("div.dijitDialog.modalPrompt.modalPromptFocused") do
       page.should have_content "Enter a name for the new order"
       page.should have_content "SAVE AS"
       within(:css, "div.dijitReset.dijitInputField.dijitInputContainer") do

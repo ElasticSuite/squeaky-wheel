@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "The sizing screen", :sauce => true do
+describe "The sizing screen", :sauce => ENV['ON_SAUCE'] do
   it "can be visited from order page", :js => true do
     sign_in_rep
     create_populated_order

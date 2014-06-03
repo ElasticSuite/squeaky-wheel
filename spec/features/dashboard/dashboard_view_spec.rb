@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Within the dashboard upon login", :spice => true do
+describe "Within the dashboard upon login", :sauce => ENV['ON_SAUCE'] do
   it "has the requisite links", :js => true do
     sign_in_rep
 
