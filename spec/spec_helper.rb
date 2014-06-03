@@ -19,6 +19,14 @@ RSpec.configure do |config|
   config.order = "random"
 end
 
+if ENV['ON_SAUCE']
+  Capybara.default_driver = :sauce
+  Capybara.javascript_driver = :sauce
+else
+  Capybara.default_driver = :webkit
+  Capybara.javascript_driver = :selenium
+end
+
 require "sauce_helper"
 
 def sign_in_rep(args = {})
@@ -74,16 +82,18 @@ def reset_rep
 end
 
 def destroy_order
-  first("span", :text => "Menu").click
-  first("tr.dijitMenuItem", :text => "Save").click
+  # first("span", :text => "Menu").click
+  # first("tr.dijitMenuItem", :text => "Save").click
   first("span", :text => "Menu").click
   find("tr.dijitMenuItem", :text => "Open From Cloud").click
 
   page.should have_content "Order #"
   page.should have_content "Last Saved"
 
-  within(:css, "div.dgrid-scroller") do
-    first(:css, 'span.dijitReset.close').click
+  within('div[id^="dgrid_0-row"]', :match => :first) do
+    within("span.dijitReset.close") do
+      find("span.dijitButtonContents.dijitStretch").click
+    end
   end
   within("div.modalConfirm") do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
