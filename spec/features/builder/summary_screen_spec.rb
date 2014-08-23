@@ -5,7 +5,6 @@ describe "The Summary page", :sauce => ENV['ON_SAUCE'] do
     sign_in_rep
     create_order
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Summary").click
-    page.should have_content("Category")
     page.should have_content("Quantity")
     page.should have_content("Price")
     within("div.typeButtons") do
@@ -27,7 +26,6 @@ describe "The Summary page", :sauce => ENV['ON_SAUCE'] do
     create_order_with_sizes
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Summary").click
     page.should have_content("Quantity")
-    page.should have_content("Category")
     @quantity = 0
     @price = 0
     all("td.column.quantityPercent").each do |num|
