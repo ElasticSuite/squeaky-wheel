@@ -62,11 +62,14 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
     sleep(1)
     find("span.dijitReset dijitInline dijitButtonText", :text => "Submit Changes").click
     page.should have_content("Successfully Updated!")
+    sleep(0.2)
     find_field("Last Name")
     fill_in "Last Name", :with => "Maximus"
-    find("div.field submit", :text => "Submit Changes").click
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Submit Changes").click
+    sleep(0.2)
     page.should have_content("Successfully Updated!")
-    page.should have_content("RobotButler Maximus")
+    page.should have_content("RobotButler")
+    page.should have_content("Maximus")
 
     reset_rep
   end
@@ -79,8 +82,10 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
     page.should have_content("Submit Changes")
     sleep(1)
     fill_in "Username", :with => "robinski.rep"
-    find("span.dijitReset dijitInline dijitButtonText", :text => "Submit Changes").click
-    find("#dijit_form_Button_13_label", :text => "Logout")
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Submit Changes").click
+    within(:css, "div.userStatus") do
+      find("span.dijitReset.dijitInline.dijitButtonText", :text => "Logout", :visible => true).click
+    end
 
     find_field("Username").value == "robinski.rep"
     sign_out

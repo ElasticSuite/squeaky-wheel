@@ -34,7 +34,7 @@ def sign_in_rep(args = {})
   args[:password] ||= "testing1"
 
   visit('#')
-  page.should have_content("An account is required to access the")
+  page.should have_content("An account is required to access this")
   find("#widget_elasticScramble_splash_login_username")
   find("#widget_elasticScramble_splash_login_password")
 
@@ -126,15 +126,8 @@ def visit_builder
 end
 
 def create_populated_order(order_name = "KEEP tester order")
-  find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create New Document").click
-  find_field("Name").set("#{order_name}")
-  within("div.field.submit") do
-    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Create").click
-  end
+  create_order(order_name)
   find("span.dijitReset.dijitInline.dijitButtonText", :text => "Order").click
-  page.should have_content "Summary"
-  page.should have_content "Items"
-  page.should have_content "Menu"
   within('ul.variations', :match => :first) do
     first("li").click
   end

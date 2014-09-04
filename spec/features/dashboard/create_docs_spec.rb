@@ -25,9 +25,14 @@ describe "Within create new document tab", :sauce => ENV['ON_SAUCE'] do
     within("div.submit") do
       find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create").click
     end
+
+    sleep(0.2)
     page.should have_content("0.00 Total")
     current_url.split("#")[1] == "builder,browse"
-    page.should have_content("Logout")
+    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Menu").click
+    first("td", :text => "Save").click
+    page.should have_content("Document saved.")
+    destroy_order
   end
 
   it "wont create if the catalog name is invalid", :js => true  do
@@ -38,11 +43,8 @@ describe "Within create new document tab", :sauce => ENV['ON_SAUCE'] do
     within("div.submit") do
       find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create").click
     end
-      page.should have_content("New Order")
-    find_field("Name")
-    within("div.submit") do
-      find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create")
-    end
+    page.should_not have_content("Purchase")
+    page.should have_content("Account Settings")
   end
 
   it "wont create if customer name is invalid", :js => true  do
@@ -53,6 +55,7 @@ describe "Within create new document tab", :sauce => ENV['ON_SAUCE'] do
     within("div.submit") do
       find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create").click
     end
+
     page.should have_content("New Order")
     within("div.submit") do
       find("span.dijitReset.dijitInline.dijitButtonNode", :text => "Create")

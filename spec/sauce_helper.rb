@@ -7,6 +7,7 @@ require "capybara/rspec"
 
 Capybara.default_driver = :sauce
 Capybara.app_host = 'http://sharedstaging.tnf.elasticsuite.com/'
+
 Capybara.default_wait_time = 10
 Sauce.config do |config|
   config[:browsers] = [
