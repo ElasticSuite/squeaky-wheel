@@ -50,13 +50,13 @@ describe "A full page walkthrough", :sauce => ENV['ON_SAUCE'] do
     end
     find("p.units").click
     find("p.units").value == "Units:1"
-    first("span.priceLabel").value != "$0.00"
+    #first("span.priceLabel").value != "$0.00"
 
     # Summary of order shows up
 
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Summary").click
     page.should have_content("Quantity")
-    page.should have_content("Category")
+    #page.should have_content("Category")
     @quantity = 0
     @price = 0
     all("td.column.quantityPercent").each do |num|
@@ -82,7 +82,7 @@ describe "A full page walkthrough", :sauce => ENV['ON_SAUCE'] do
       find("input.dijitReset.dijitInputInner").set("123456")
     end
     find("span#finalSubmitButton_label", :text => "Submit Order").click
-    page.should have_content("ORDER SUBMISSION")
+    page.should have_content("Order Submission")
     page.should have_content("Your order is about to be submitted.")
     within("div.actions.dijitDialogPaneActionBar.right") do
       find("span.dijitReset.dijitInline.dijitButtonText", :text => "Submit").click
@@ -126,9 +126,10 @@ describe "A full page walkthrough", :sauce => ENV['ON_SAUCE'] do
     page.should have_content("Total")
     page.should have_content("Last Saved")
 
-    within(:css, "div.dgrid-scroller") do
-      first(:css, 'span.dijitReset.close').click
-    end
+    
+    first("span.dijitReset.dijitInline.dijitButtonText", :text => "X").click
+    
+    
     within("div.modalConfirm") do
       find("span.dijitReset.dijitInline.dijitButtonText", :text => "Yes").click
     end
@@ -136,4 +137,4 @@ describe "A full page walkthrough", :sauce => ENV['ON_SAUCE'] do
 
     sign_out
   end
-end
+end 

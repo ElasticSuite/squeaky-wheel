@@ -25,14 +25,15 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
   it "fields changed with correct password input", :js => true do
     sign_in_rep
 
-    find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").click
+    wait_until{find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").visible?}.click
 
     page.should have_content("Submit Changes")
     page.should have_content("Confirm")
 
     fill_in "Password", :with => "testing123"
     fill_in "Confirm Password", :with => "testing123"
-    find("#dijit_form_Button_14_label", :text => "Submit Changes").click
+    sleep(1)
+    find("span.dijitReset dijitInline dijitButtonText", :text => "Submit Changes").click
     page.should have_content("Submit Changes")
     sign_out
     sign_in_rep(:username => "automatictester.rep", :password => "testing123")
@@ -47,7 +48,8 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
     page.should have_content("Password")
     fill_in "Password", :with => "sdfsdfs"
     fill_in "Confirm Password", :with => "bnmbnmb"
-    find("#dijit_form_Button_14_label", :text => "Submit Changes").click
+    sleep(1)
+    find("span.dijitReset dijitInline dijitButtonText", :text => "Submit Changes").click
     page.should have_content("Passwords do not match.")
   end
 
@@ -56,13 +58,13 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
 
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").click
     find_field("First Name")
-
     fill_in "First Name", :with => "RobotButler"
-    find("#dijit_form_Button_14_label", :text => "Submit Changes").click
+    sleep(1)
+    find("span.dijitReset dijitInline dijitButtonText", :text => "Submit Changes").click
     page.should have_content("Successfully Updated!")
     find_field("Last Name")
     fill_in "Last Name", :with => "Maximus"
-    find("#dijit_form_Button_14_label", :text => "Submit Changes").click
+    find("div.field submit", :text => "Submit Changes").click
     page.should have_content("Successfully Updated!")
     page.should have_content("RobotButler Maximus")
 
@@ -75,9 +77,9 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").click
     find_field("Username")
     page.should have_content("Submit Changes")
-
+    sleep(1)
     fill_in "Username", :with => "robinski.rep"
-    find("#dijit_form_Button_14_label", :text => "Submit Changes").click
+    find("span.dijitReset dijitInline dijitButtonText", :text => "Submit Changes").click
     find("#dijit_form_Button_13_label", :text => "Logout")
 
     find_field("Username").value == "robinski.rep"
@@ -93,8 +95,8 @@ describe "Within the account settings tab", :sauce => ENV['ON_SAUCE'] do
 
     find("span.dijitReset.dijitInline.dijitButtonText", :text => "Account Settings").click
     find_field("E-mail")
-
     fill_in "E-mail", :with => "random123@example.com"
+    sleep(1)
     find("#dijit_form_Button_14_label", :text => "Submit Changes").click
     find_field("E-mail").value == "random123@example.com"
     page.should have_content("Successfully Updated!")
